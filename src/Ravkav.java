@@ -14,6 +14,8 @@ import java.awt.event.*;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.LinkedList;
 import javax.swing.border.*;
@@ -79,6 +81,7 @@ public class Ravkav extends SmartCard implements ActionListener {
 	
 	String ROUTES[];
 	
+	Map<Integer, String> tabs_op;
 	
 	Scanner reader = new Scanner(System.in);
 	String select_by_id = "00A4000002";
@@ -137,7 +140,7 @@ public class Ravkav extends SmartCard implements ActionListener {
 		this.add(table);
 		this.setTitle("Rav Kav");
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setSize(350, 450);
+		this.setSize(400, 550);
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
 		
@@ -228,7 +231,7 @@ public class Ravkav extends SmartCard implements ActionListener {
 			//tabs_panel.add(new JLabel(" "), "span, grow");
 
 			tabs_panel.add(tabs_labels[i]=new JLabel("Tab "+(i+1)+": "));
-			tabs[i] = new JTextArea(2, 19);
+			tabs[i] = new JTextArea(3, 19);
 			tabs_panel.add(tabs[i], "span, grow");
 			tabs[i].setEditable(false);
 		}
@@ -263,6 +266,10 @@ public class Ravkav extends SmartCard implements ActionListener {
 		ROUTES[11] = "";
 		ROUTES[11] = "";
 		
+		tabs_op = new HashMap<Integer, String>();
+		tabs_op.put(19, "Rail");
+		tabs_op.put(320, "Dan");
+		tabs_op.put(416, "Egged");
 		
 		return super.init();
 	}
@@ -334,15 +341,18 @@ public class Ravkav extends SmartCard implements ActionListener {
 				if (ts.equals("01/01/1997"))
 					continue;
 				int counter = Integer.parseInt(counters.substring(9*(i-1), 9*(i-1) + 8).replace(" ", ""), 16);
-
+				int op = Integer.parseInt(rapdu.toString().substring(32, 36).replace(" ", ""), 16);
 				//Date date = new Date(date_ts*1000);
 				//String ts = new SimpleDateFormat("dd/MM/yyyy").format(date);
 				System.out.println(ts);
+				System.out.println(op);
 				System.out.println(counter);
 				System.out.println();
-				tabs[i-1].setText("Purchase date: ");
+				tabs[i-1].setText("Operator: "+tabs_op.get(op));
+				tabs[i-1].setText(tabs[i-1].getText()+"\n"+"Purchase date: ");
 				tabs[i-1].setText(tabs[i-1].getText()+ts);
 				tabs[i-1].setText(tabs[i-1].getText()+"\n"+"Balance: "+counter);
+				
 				tabs[i-1].setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(counter>0?Color.GREEN:Color.RED), 
 				            BorderFactory.createEmptyBorder(1, 15, 1, 15)));
 				

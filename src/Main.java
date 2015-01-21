@@ -133,6 +133,7 @@ public class Main {
 		}*/
 		//initPanel();
 		Ravkav card = new Ravkav();
+		//do_bruteforce(card);
 		//card.read_tabs();
 		//card.dump_all();
 		
